@@ -1,5 +1,8 @@
 #include "../inc/CPU_sche.h"
 
+bool isIOWorking = false;
+bool isCPUWorking = false;
+
 int main(void)
 {
 	srand(time(NULL)); // random seed 설정
@@ -10,11 +13,12 @@ int main(void)
 	priority_queue readyQueue = {.size = 0};
 	priority_queue waitingQueue = {.size = 0};
 
-	while (1) {
-		Create_Process();
-		Config();
-		Schedule();
-		Evaluation();
-		Gantt();
-	}
+	// while (1) {
+		Create_Process(Processes);
+		Config(&jobQueue, &readyQueue, &waitingQueue);
+		// Schedule();
+		// Evaluation();
+		// Gantt();
+	// }
+
 }
