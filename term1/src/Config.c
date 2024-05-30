@@ -5,7 +5,7 @@ void	initializeQueue(priority_queue *Queue) {
 		pq_pop(Queue, FCFS_enum);
 }
 
-void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue)
+void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue)
 {
 	extern bool isIOWorking;
 	extern bool isCPUWorking;
@@ -13,7 +13,7 @@ void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue
 	initializeQueue(jobQueue);
 	initializeQueue(readyQueue);
 	initializeQueue(waitingQueue);
-
+	initializeQueue(terminatedQueue);
 	// IO & CPU state initialize
 	isIOWorking = false;
 	isCPUWorking = false;
