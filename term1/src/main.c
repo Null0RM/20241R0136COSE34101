@@ -38,7 +38,7 @@ void	print_menu() {
 
 bool finish_menu()
 {
-	printf("\n계속 하시려면 1을, 종료를 원하시면 아무 키나 입력해주세요.\n>>");
+	printf("\n계속 하시려면 1을, 종료를 원하시면 아무 키나 입력해주세요. >> ");
 	int finFlag;
 	scanf("%d", &finFlag);
 	return finFlag == 1 ? true : false;
@@ -64,8 +64,8 @@ int main(void)
 		}
 		Config(&jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
 		Schedule(sche, &jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
-		// Evaluation();
 		Gantt();
+		Evaluation(&terminatedQueue);
 		switch (finish_menu()) {
 			case 0:
 				break;

@@ -42,7 +42,7 @@ typedef struct
 	int Arrival_time;
 	int Priority;
 	int Processed_time;
-	int terminate_time;
+	int terminated_time;
 } Process;
 // 우선순위큐
 typedef struct
@@ -64,7 +64,7 @@ int pq_push(priority_queue *q, Process process, schedule_enum schedule_enum);
 void	Create_Process(Process *Processes);
 void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue); 
 void 	Schedule();
-void	Evaluation();
+void	Evaluation(priority_queue *terminatedQueue);
 void	Gantt();
 ////MAJOR_FUC_END////
 /* __FUNCTIONS_END__ */
