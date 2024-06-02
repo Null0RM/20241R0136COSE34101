@@ -24,7 +24,8 @@ void	Print_Processes(Process *Processes) {
 
 void	Create_Process(Process *Processes)
 {
-	for(int i = 0; i < MAX_PROCESS_SIZE; i++) {
+	for(int i = 0; i < MAX_PROCESS_SIZE; i++) 
+	{
 		Processes[i] = Create_Random_Process(i);
 	}
 	Print_Processes(Processes);

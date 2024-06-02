@@ -1,7 +1,7 @@
 #include "../inc/CPU_sche.h"
 
 bool isIOWorking = false;
-bool isCPUWorking = false;
+bool isCPUBusy = false;
 int	currentTime = 0;
 Process runningCPUProcess;
 Process runningIOProcess;

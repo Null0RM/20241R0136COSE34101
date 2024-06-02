@@ -41,7 +41,7 @@ typedef struct
 	int IO_burst_time;
 	int Arrival_time;
 	int Priority;
-	int Continued_time;
+	int Processed_time;
 	int terminate_time;
 } Process;
 // 우선순위큐
@@ -70,7 +70,7 @@ void	Gantt();
 /* __FUNCTIONS_END__ */
 
 /* __VARIABLES_START__ */
-extern bool isCPUWorking;
+extern bool isCPUBusy;
 extern bool isIOWorking;
 
 extern int currentTime;
