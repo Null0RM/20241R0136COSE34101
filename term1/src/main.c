@@ -2,42 +2,75 @@
 
 bool isIOWorking = false;
 bool isCPUWorking = false;
+int	currentTime = 0;
+Process runningCPUProcess;
+Process runningIOProcess;
+char timeLine[65536];
+char topLine[65536];
+char bottomLine[65536];
+char middleLineIO[65536];
+char middleLineCPU[65536];
+// processes array
+Process Processes[MAX_PROCESS_SIZE];
+// priority queue 초기화
+priority_queue jobQueue = {.size = 0};
+priority_queue readyQueue = {.size = 0};
+priority_queue waitingQueue = {.size = 0};
+priority_queue terminatedQueue = {.size = 0};
 
 void	print_menu() {
-	char *guide_letter =
-		"수행하고자하는 알고리즘의 번호를 선택해주세요. 종료를 원하시면 이외의 숫자를 눌러주세요\n"
-		"0 : FCFS\n"
-		"1 : SJF\n"
-		"2 : STRF\n"
-		"3 : Preemtive Priority\n"
-		"4 : Non Preempvie Priority\n"
-		"5 : RR\n";
+	char *menu =
+		"+============== Scheduling Algorithms ==============+\n"
+		"|                                                   |\n"
+		"|             1 : FCFS                              |\n"
+		"|             2 : SJF (Preemptive)                  |\n"
+		"|             3 : SJF (Non Preemptive)              |\n"
+		"|             4 : Priority (Preemptive)             |\n"
+		"|             5 : Priority (Non Preemptive)         |\n"
+		"|             6 : RR                                |\n"
+		"|             7 : 프로그램 종료                     |\n"
+		"|                                                   |\n"
+		"+===================================================+\n"
+		"실행할 알고리즘 번호를 선택해주세요 >> ";
 
-	printf("%s", guide_letter);
+	printf("%s", menu);
+}
+
+bool finish_menu()
+{
+	printf("\n계속 하시려면 1을, 종료를 원하시면 아무 키나 입력해주세요.\n>>");
+	int finFlag;
+	scanf("%d", &finFlag);
+	return finFlag == 1 ? true : false;
 }
 
 int main(void)
 {
 	srand(time(NULL)); // random seed 설정
-	// processes array
-	Process Processes[MAX_PROCESS_SIZE];
-	// priority queue 초기화
-	priority_queue jobQueue = {.size = 0};
-	priority_queue readyQueue = {.size = 0};
-	priority_queue waitingQueue = {.size = 0};
-	// priority_queue terminatedQueue = {.size = 0};
 
 	int sche;
 
 	while (1) {
+		Create_Process(Processes);
+
 		print_menu();
 		scanf("%d", &sche);
-		if (sche > 5 || sche < 0)
+		if (sche == 7) {
+			break;
+		}
+		else if (sche > 6 || sche < 1) {
+			printf("Please select a correct number\n");
 			continue;
-		Create_Process(Processes);
-		Config(&jobQueue, &readyQueue, &waitingQueue);
-		//Schedule(sche, &jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
+		}
+		Config(&jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
+		Schedule(sche, &jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
 		// Evaluation();
-		// Gantt();
+		Gantt();
+		switch (finish_menu()) {
+			case 0:
+				break;
+			case 1:
+				continue;
+		}
 	}
 }

@@ -15,16 +15,16 @@
 ////ENUM_START////
 typedef enum
 {
-	FCFS_enum,
-	NonPreemptiveSJF_enum,
-	PreemtiveSJF_enum,
-	NonPreemptivePriority_enum,
-	PreemtivePriority_enum,
-	RR_enum
+	FCFS_enum = 1,
+	NonPreemptiveSJF_enum = 2,
+	PreemtiveSJF_enum = 3,
+	NonPreemptivePriority_enum = 4,
+	PreemtivePriority_enum = 5,
+	RR_enum = 6
 } schedule_enum;
 ////ENUM_END////
 ////MACROS_START////
-#  define MAX_PROCESS_SIZE 10
+#  define MAX_PROCESS_SIZE 5	
 #  define TIME_QUANTUM 3
 #  define MAX_CPU_BURST_TIME 10
 #  define MAX_IO_BURST_TIME 5
@@ -41,6 +41,8 @@ typedef struct
 	int IO_burst_time;
 	int Arrival_time;
 	int Priority;
+	int Continued_time;
+	int terminate_time;
 } Process;
 // 우선순위큐
 typedef struct
@@ -59,9 +61,9 @@ int pq_push(priority_queue *q, Process process, schedule_enum schedule_enum);
 ////HELPER_FUNCTIONS_END////
 
 ////MAJOR_FUC_START////
-void Create_Process(Process *Processes);
-void	Config();
-void	Schedule();
+void	Create_Process(Process *Processes);
+void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue); 
+void 	Schedule();
 void	Evaluation();
 void	Gantt();
 ////MAJOR_FUC_END////
@@ -70,6 +72,25 @@ void	Gantt();
 /* __VARIABLES_START__ */
 extern bool isCPUWorking;
 extern bool isIOWorking;
+
+extern int currentTime;
+
+extern Process runningCPUProcess;
+extern Process runningIOProcess;
+
+extern char timeLine[65536];
+extern char topLine[65536];
+extern char bottomLine[65536];
+extern char middleLineIO[65536];
+extern char middleLineCPU[65536];
+
+// processes array
+extern Process Processes[MAX_PROCESS_SIZE];
+// priority queue 초기화
+extern priority_queue jobQueue;
+extern priority_queue readyQueue;
+extern priority_queue waitingQueue;
+extern priority_queue terminatedQueue;
 /* __VARIABLES_END__ */
 
 #endif
