@@ -27,7 +27,7 @@ void	print_menu() {
 		"|             3 : SJF (Non Preemptive)              |\n"
 		"|             4 : Priority (Preemptive)             |\n"
 		"|             5 : Priority (Non Preemptive)         |\n"
-		"|             6 : RR                                |\n"
+		"|             6 : Round Robin                       |\n"
 		"|             7 : 프로그램 종료                     |\n"
 		"|                                                   |\n"
 		"+===================================================+\n"
@@ -64,8 +64,11 @@ int main(void)
 		}
 		Config(&jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
 		Schedule(sche, &jobQueue, &readyQueue, &waitingQueue, &terminatedQueue);
+		// print Gantt chart
 		Gantt();
+		// scheduler evaluation
 		Evaluation(&terminatedQueue);
+		// finish scheduler or continue
 		switch (finish_menu()) {
 			case 1:
 				continue;
