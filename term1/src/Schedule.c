@@ -65,7 +65,6 @@ void doCPUOperation(Process currentProcess, priority_queue *waitingQueue, priori
 	if (currentProcess.CPU_burst_time == 0)
 	{
 		// 끝난 프로세스의 처음 상태에 terminate time만 추가해서 terminate queue 큐에 담아줌.
-		// currentProcess 는 runningCPUProcess가 넘어와서 CPU_burst_time등이 변경되어있는 상태니까 초기의 상태로 evaluation 해야 함
 		int tempCurrent = currentTime + 1;
 		Processes[currentProcess.Process_ID].terminated_time = tempCurrent;
 		pq_push(terminatedQueue, Processes[currentProcess.Process_ID], FCFS_enum);

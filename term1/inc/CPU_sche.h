@@ -49,7 +49,7 @@ typedef struct
 // 우선순위큐
 typedef struct
 {
-	Process queue[MAX_PROCESS_SIZE];
+	Process minHeap[MAX_PROCESS_SIZE];
 	int size;
 } priority_queue;
 /* __MACROS_AND_TYPEDEF_END__*/
