@@ -2,6 +2,7 @@
 
 void Gantt()
 {
+	// CPU gantt  chart
 	puts("");
 	for (size_t i = 0; i < strlen(topLine) / 2 - strlen("[CPU Gantt Chart]") / 2; i++)
 		printf(" ");
@@ -11,6 +12,7 @@ void Gantt()
 	puts(bottomLine);
 	puts(timeLine);
 	puts("");
+	// IO gantt chart
 	puts("");
 	for (size_t i = 0; i < strlen(topLine) / 2 - strlen("[IO Gantt Chart]") / 2; i++)
 		printf(" ");

@@ -30,6 +30,7 @@ typedef enum
 #  define MAX_IO_BURST_TIME 5
 #  define MAX_PRIORITY 4
 #  define MAX_ARRIVAL_TIME 10
+#  define MAX_TIMELINE_LEN 1500
 ////MACROS_END////
 
 ////TYPEDEF_START////
@@ -78,11 +79,11 @@ extern int currentTime;
 extern Process runningCPUProcess;
 extern Process runningIOProcess;
 
-extern char timeLine[65536];
-extern char topLine[65536];
-extern char bottomLine[65536];
-extern char middleLineIO[65536];
-extern char middleLineCPU[65536];
+extern char timeLine[MAX_TIMELINE_LEN];
+extern char topLine[MAX_TIMELINE_LEN];
+extern char bottomLine[MAX_TIMELINE_LEN];
+extern char middleLineIO[MAX_TIMELINE_LEN];
+extern char middleLineCPU[MAX_TIMELINE_LEN];
 
 // processes array
 extern Process Processes[MAX_PROCESS_SIZE];

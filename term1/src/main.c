@@ -5,11 +5,11 @@ bool isCPUBusy = false;
 int	currentTime = 0;
 Process runningCPUProcess;
 Process runningIOProcess;
-char timeLine[65536];
-char topLine[65536];
-char bottomLine[65536];
-char middleLineIO[65536];
-char middleLineCPU[65536];
+char timeLine[MAX_TIMELINE_LEN];
+char topLine[MAX_TIMELINE_LEN];
+char bottomLine[MAX_TIMELINE_LEN];
+char middleLineIO[MAX_TIMELINE_LEN];
+char middleLineCPU[MAX_TIMELINE_LEN];
 // processes array
 Process Processes[MAX_PROCESS_SIZE];
 // priority queue 초기화
@@ -67,10 +67,11 @@ int main(void)
 		Gantt();
 		Evaluation(&terminatedQueue);
 		switch (finish_menu()) {
-			case 0:
-				break;
 			case 1:
 				continue;
+				break;
+			default:
+				return 0;
 		}
 	}
 }
