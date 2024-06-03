@@ -55,10 +55,12 @@ int main(void)
 
 		print_menu();
 		scanf("%d", &sche);
-		if (sche == 7) {
+		if (sche == 7)
+		{
 			break;
 		}
-		else if (sche > 6 || sche < 1) {
+		else if (sche > 6 || sche < 1) 
+		{
 			printf("Please select a correct number\n");
 			continue;
 		}

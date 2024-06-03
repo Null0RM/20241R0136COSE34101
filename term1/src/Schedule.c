@@ -29,64 +29,64 @@ void storeMiddleLine(bool isCpu, bool isIdle)
 	}
 }
 
-void doIOOperation(Process selectedProcess, priority_queue *readyQueue, schedule_enum sch_method)
+void doIOOperation(Process currentProcess, priority_queue *readyQueue, schedule_enum sch_method)
 {
 
 	isIOWorking = true;
 
 	// 들어왔다는건 일단 수행되었다는 거니까 io burst time 깎아줌.
-	selectedProcess.IO_burst_time--;
+	currentProcess.IO_burst_time--;
 
 	//(io burst time 끝날때 (isr 처리 위한 cpu burst time 무조건 남아있을 것) || 1/2 확률로 IO 수행 끝낼 때) && (io busrt time 남아있는데 cpu burst time 1 이하가 아닐때)
 	// 만약 io busrt time 남아있는데 cpu burst time 1 이하이면 무조건 다음 io 도 해당 프로세스로 되어야함. 왜냐하면 io 수행하고 isr 처리하기 위한 cpu burst time 남아있어야하기 때문
-	if ((selectedProcess.IO_burst_time == 0 || rand() % 2 == 0) && !(selectedProcess.IO_burst_time > 0 && selectedProcess.CPU_burst_time <= 1))
+	if ((currentProcess.IO_burst_time == 0 || rand() % 2 == 0) && !(currentProcess.IO_burst_time > 0 && currentProcess.CPU_burst_time <= 1))
 	{
 		// IO operation -> readyQueue 에 넣기. 스케쥴링 따라서 넣어줘야 함.
 		int tempCurrent = currentTime + 1;
-		selectedProcess.Arrival_time = tempCurrent;
-		pq_push(readyQueue, selectedProcess, sch_method);
+		currentProcess.Arrival_time = tempCurrent;
+		pq_push(readyQueue, currentProcess, sch_method);
 		isIOWorking = false;
 	}
 	else
 	{
 		// IO operation 다음에도 얘로 하겠다.
-		runningIOProcess = selectedProcess;
+		runningIOProcess = currentProcess;
 	}
 }
 
-void doCPUOperation(Process selectedProcess, priority_queue *waitingQueue, priority_queue *terminatedQueue)
+void doCPUOperation(Process currentProcess, priority_queue *waitingQueue, priority_queue *terminatedQueue)
 {
 	isCPUBusy = true;
 
-	selectedProcess.CPU_burst_time--;
-	selectedProcess.Processed_time++; // for RR
+	currentProcess.CPU_burst_time--;
+	currentProcess.Processed_time++; // for RR
 
 	// cpu burst time 끝나면 종료
-	if (selectedProcess.CPU_burst_time == 0)
+	if (currentProcess.CPU_burst_time == 0)
 	{
 		// 끝난 프로세스의 처음 상태에 terminate time만 추가해서 terminate queue 큐에 담아줌.
-		// selectedProcess 는 runningCPUProcess가 넘어와서 CPU_burst_time등이 변경되어있는 상태니까 초기의 상태로 evaluation 해야 함
+		// currentProcess 는 runningCPUProcess가 넘어와서 CPU_burst_time등이 변경되어있는 상태니까 초기의 상태로 evaluation 해야 함
 		int tempCurrent = currentTime + 1;
-		Processes[selectedProcess.Process_ID].terminated_time = tempCurrent;
-		pq_push(terminatedQueue, Processes[selectedProcess.Process_ID], FCFS_enum);
+		Processes[currentProcess.Process_ID].terminated_time = tempCurrent;
+		pq_push(terminatedQueue, Processes[currentProcess.Process_ID], FCFS_enum);
 		isCPUBusy = false;
 		return;
 	}
 
 	// IO 수행여부 결정. 1/2 확률 && io burst time이 남아있으면 수행 || io burst 가 남아있는데 cpu burst 1 이하로 남아있으면 waiting Queue로 넘어가서 수행 끝내고 와야함
-	if ((rand() % 2 == 0 && selectedProcess.IO_burst_time > 0) || (selectedProcess.IO_burst_time > 0 && selectedProcess.CPU_burst_time <= 1))
+	if ((rand() % 2 == 0 && currentProcess.IO_burst_time > 0) || (currentProcess.IO_burst_time > 0 && currentProcess.CPU_burst_time <= 1))
 	{
-		// cpu 끝내겠다 -> IO 에 넣기.
+		// cpu 끝내고 IO에 넣기
 		int tempCurrent = currentTime + 1;
-		selectedProcess.Arrival_time = tempCurrent; // 현재 시간에는 cpu가 수행 이미 완료 됐고, 그 다음 시간에 waitingQueue로 들어갈 애니까 +1 해서 arrvalTime에 할당
-		selectedProcess.Processed_time = 0;			// cpu 연속된 시간 0으로 다시 초기화
-		pq_push(waitingQueue, selectedProcess, FCFS_enum);
+		currentProcess.Arrival_time = tempCurrent; // 현재 시간에는 cpu가 수행 이미 완료 됐고, 그 다음 시간에 waitingQueue로 들어갈 애니까 +1 해서 arrvalTime에 할당
+		currentProcess.Processed_time = 0;			// cpu 연속된 시간 0으로 다시 초기화
+		pq_push(waitingQueue, currentProcess, FCFS_enum);
 		isCPUBusy = false;
 	}
 	else
 	{
 		// IO operation 발생 안하는 경우. 다음 수행될 프로세스도 이거란 얘기.
-		runningCPUProcess = selectedProcess;
+		runningCPUProcess = currentProcess;
 	}
 }
 
@@ -200,8 +200,8 @@ void Schedule(schedule_enum sche_enum, priority_queue *jobQueue, priority_queue 
 			// cpu not busy 상태면 readyQueue에서 꺼내서 cpu 할당해줘야함. 그 전에 readyQueue 비어있는 상태인지 체크. 비어있다면 cpu idle 상태.
 			if (readyQueue->size > 0)
 			{
-				Process selectedProcess = pq_pop(readyQueue, sche_enum);
-				runningCPUProcess = selectedProcess;
+				Process currentProcess = pq_pop(readyQueue, sche_enum);
+				runningCPUProcess = currentProcess;
 				doCPUOperation(runningCPUProcess, waitingQueue, terminatedQueue);
 				storeMiddleLine(true, false);
 			}
@@ -224,18 +224,18 @@ void Schedule(schedule_enum sche_enum, priority_queue *jobQueue, priority_queue 
 			if (waitingQueue->size > 0)
 			{
 				// IO 작업 시작.  arrival time 대로 진행되어야하므로 fcfs 스케쥴링.
-				Process selectedProcess = pq_pop(waitingQueue, FCFS_enum);
+				Process currentProcess = pq_pop(waitingQueue, FCFS_enum);
 				int tempCurrent = currentTime + 1;
 
-				if (selectedProcess.Arrival_time == tempCurrent)
+				if (currentProcess.Arrival_time == tempCurrent)
 				{
 					// 만약 위의 cpu 작업에서 바로 들어온거라면 넘어감. 다시 waitingQueue에 그대로 넣어주고 스루
-					pq_push(waitingQueue, selectedProcess, FCFS_enum);
+					pq_push(waitingQueue, currentProcess, FCFS_enum);
 					storeMiddleLine(false, true);
 				}
 				else
 				{
-					runningIOProcess = selectedProcess;
+					runningIOProcess = currentProcess;
 					storeMiddleLine(false, false);
 					doIOOperation(runningIOProcess, readyQueue, sche_enum);
 				}
