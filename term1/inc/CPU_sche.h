@@ -26,8 +26,8 @@ typedef enum
 ////MACROS_START////
 #  define MAX_PROCESS_SIZE 5	
 #  define TIME_QUANTUM 3
-#  define MAX_CPU_BURST_TIME 10
-#  define MAX_IO_BURST_TIME 5
+#  define MAX_CPU_BURST_TIME 9
+#  define MAX_IO_BURST_TIME 4
 #  define MAX_PRIORITY 4
 #  define MAX_ARRIVAL_TIME 10
 #  define MAX_TIMELINE_LEN 1500
@@ -44,11 +44,12 @@ typedef struct
 	int Priority;
 	int Processed_time;
 	int terminated_time;
+	int	queue_level;
 } Process;
 // 우선순위큐
 typedef struct
 {
-	Process heap[MAX_PROCESS_SIZE];
+	Process queue[MAX_PROCESS_SIZE];
 	int size;
 } priority_queue;
 /* __MACROS_AND_TYPEDEF_END__*/
@@ -63,8 +64,8 @@ int pq_push(priority_queue *q, Process process, schedule_enum schedule_enum);
 
 ////MAJOR_FUC_START////
 void	Create_Process(Process *Processes);
-void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue); 
-void 	Schedule();
+void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue);
+void	Schedule(schedule_enum sche_enum, priority_queue *jobQueue, priority_queue *readyQueue, priority_queue *waitingQueue, priority_queue *terminatedQueue);
 void	Evaluation(priority_queue *terminatedQueue);
 void	Gantt();
 ////MAJOR_FUC_END////
