@@ -1,6 +1,6 @@
 #include "../inc/CPU_sche.h"
 
-bool isIOWorking = false;
+bool isIOBusy = false;
 bool isCPUBusy = false;
 int	currentTime = 0;
 Process runningCPUProcess;
@@ -49,9 +49,9 @@ int main(void)
 	srand(time(NULL)); // random seed 설정
 
 	int sche;
+	Create_Process(Processes);
 
 	while (1) {
-		Create_Process(Processes);
 
 		print_menu();
 		scanf("%d", &sche);

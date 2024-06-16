@@ -1,7 +1,13 @@
 #include "../inc/CPU_sche.h"
 
-void swap(Process *first, Process *second) {
-    Process tmp = *first;
+void swap(Process *first, Process *second);
+int pq_push(priority_queue *q, Process process, schedule_enum schedule_enum);
+Process pq_pop(priority_queue *q, schedule_enum schedule_enum);
+
+
+void swap(Process *first, Process *second)
+{
+	Process tmp = *first;
     *first = *second;
     *second = tmp;
 }
@@ -74,25 +80,25 @@ Process pq_pop(priority_queue *q, schedule_enum schedule_enum)
 	q->minHeap[0] = q->minHeap[q->size]; // 루트에 가장 낮은거 올림
 
 	int current = 0;
-	int leftChild = current * 2 + 1;
-	int rightChild = current * 2 + 2;
+	int leftNode = current * 2 + 1;
+	int rightNode = current * 2 + 2;
 	int maxNode = current;
 
 	switch (schedule_enum)
 	{
 	case FCFS_enum:
 	case RR_enum:
-		while (leftChild < q->size)
+		while (leftNode < q->size)
 		{
 			// left child 가 있는데 max node의 arrival time 이 더 큰 경우
-			if ((q->minHeap[maxNode]).Arrival_time > (q->minHeap[leftChild]).Arrival_time)
+			if ((q->minHeap[maxNode]).Arrival_time > (q->minHeap[leftNode]).Arrival_time)
 			{
-				maxNode = leftChild;
+				maxNode = leftNode;
 			}
 			// right child 까지 있는데 max node(방금전까지 leftChild의 값)의 arrival time 이 더 큰 경우
-			if (rightChild < q->size && q->minHeap[maxNode].Arrival_time > q->minHeap[rightChild].Arrival_time)
+			if (rightNode < q->size && q->minHeap[maxNode].Arrival_time > q->minHeap[rightNode].Arrival_time)
 			{
-				maxNode = rightChild;
+				maxNode = rightNode;
 			}
 
 			if (maxNode == current)
@@ -103,22 +109,22 @@ Process pq_pop(priority_queue *q, schedule_enum schedule_enum)
 			{
 				swap(&(q->minHeap[current]), &(q->minHeap[maxNode]));
 				current = maxNode;
-				leftChild = current * 2 + 1;
-				rightChild = current * 2 + 2;
+				leftNode = current * 2 + 1;
+				rightNode = current * 2 + 2;
 			}
 		}
 		break;
 	case NonPreemptiveSJF_enum:
 	case PreemtiveSJF_enum:
-		while (leftChild < q->size)
+		while (leftNode < q->size)
 		{
-			if ((q->minHeap[maxNode]).CPU_burst_time > (q->minHeap[leftChild]).CPU_burst_time)
+			if ((q->minHeap[maxNode]).CPU_burst_time > (q->minHeap[leftNode]).CPU_burst_time)
 			{
-				maxNode = leftChild;
+				maxNode = leftNode;
 			}
-			if (rightChild < q->size && q->minHeap[maxNode].CPU_burst_time > q->minHeap[rightChild].CPU_burst_time)
+			if (rightNode < q->size && q->minHeap[maxNode].CPU_burst_time > q->minHeap[rightNode].CPU_burst_time)
 			{
-				maxNode = rightChild;
+				maxNode = rightNode;
 			}
 
 			if (maxNode == current)
@@ -129,22 +135,22 @@ Process pq_pop(priority_queue *q, schedule_enum schedule_enum)
 			{
 				swap(&(q->minHeap[current]), &(q->minHeap[maxNode]));
 				current = maxNode;
-				leftChild = current * 2 + 1;
-				rightChild = current * 2 + 2;
+				leftNode = current * 2 + 1;
+				rightNode = current * 2 + 2;
 			}
 		}
 		break;
 	case NonPreemptivePriority_enum:
 	case PreemtivePriority_enum:
-		while (leftChild < q->size)
+		while (leftNode < q->size)
 		{
-			if ((q->minHeap[maxNode]).Priority > (q->minHeap[leftChild]).Priority)
+			if ((q->minHeap[maxNode]).Priority > (q->minHeap[leftNode]).Priority)
 			{
-				maxNode = leftChild;
+				maxNode = leftNode;
 			}
-			if (rightChild < q->size && q->minHeap[maxNode].Priority > q->minHeap[rightChild].Priority)
+			if (rightNode < q->size && q->minHeap[maxNode].Priority > q->minHeap[rightNode].Priority)
 			{
-				maxNode = rightChild;
+				maxNode = rightNode;
 			}
 
 			if (maxNode == current)
@@ -155,8 +161,8 @@ Process pq_pop(priority_queue *q, schedule_enum schedule_enum)
 			{
 				swap(&(q->minHeap[current]), &(q->minHeap[maxNode]));
 				current = maxNode;
-				leftChild = current * 2 + 1;
-				rightChild = current * 2 + 2;
+				leftNode = current * 2 + 1;
+				rightNode = current * 2 + 2;
 			}
 		}
 		break;

@@ -15,8 +15,7 @@ void	Print_Processes(Process *Processes) {
 	puts("| PID | CPU_Burst_Time | IO_Burst_Time | Arrival_Time | Priority |");
 	puts("+-----+----------------+---------------+--------------+----------+");
 
-	for (int i = 0; i < MAX_PROCESS_SIZE; i++)
-	{
+	for (int i = 0; i < MAX_PROCESS_SIZE; i++) {
 		printf("| %2d  |       %2d       |      %2d       |      %2d      |    %2d    |\n", Processes[i].Process_ID, Processes[i].CPU_burst_time, Processes[i].IO_burst_time, Processes[i].Arrival_time, Processes[i].Priority);
 		puts("+-----+----------------+---------------+--------------+----------+");
 	}
@@ -25,8 +24,6 @@ void	Print_Processes(Process *Processes) {
 void	Create_Process(Process *Processes)
 {
 	for(int i = 0; i < MAX_PROCESS_SIZE; i++) 
-	{
 		Processes[i] = Create_Random_Process(i);
-	}
 	Print_Processes(Processes);
 }

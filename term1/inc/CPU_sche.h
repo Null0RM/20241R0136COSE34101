@@ -44,7 +44,6 @@ typedef struct
 	int Priority;
 	int Processed_time;
 	int terminated_time;
-	int	queue_level;
 } Process;
 // 우선순위큐
 typedef struct
@@ -73,7 +72,7 @@ void	Gantt();
 
 /* __VARIABLES_START__ */
 extern bool isCPUBusy;
-extern bool isIOWorking;
+extern bool isIOBusy;
 
 extern int currentTime;
 

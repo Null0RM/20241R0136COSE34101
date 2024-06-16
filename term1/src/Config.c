@@ -14,7 +14,7 @@ void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue
 	middleLineCPU[0] = '\0';
 
 	currentTime = 0;
-	isIOWorking = false;
+	isIOBusy = false;
 	isCPUBusy = false;
 
 	// initialize queue
@@ -23,8 +23,7 @@ void	Config(priority_queue *jobQueue, priority_queue *readyQueue, priority_queue
 	initializeQueue(waitingQueue);
 	initializeQueue(terminatedQueue);
 	// scheduling 시작할 때, arrival time 순서대로 빼내야 하니까 FCFS 방식으로 job queue에 넣어주고 시작.
-	for (int i = 0; i < MAX_PROCESS_SIZE; i++)
-	{
+	for (int i = 0; i < MAX_PROCESS_SIZE; i++) {
 		pq_push(jobQueue, Processes[i], FCFS_enum); 
 	}
-}
+}	
